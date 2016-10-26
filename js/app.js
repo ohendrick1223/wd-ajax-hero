@@ -63,6 +63,7 @@
     var apiQuery = 'http://www.omdbapi.com/?s=';
 
     $("#searchbutton").on("click", searchIt);
+    $("#search").on("click", refresh);
 
     function searchIt(event) {
         //console.log("I'm listening");
@@ -74,40 +75,35 @@
             //console.log("you typed something");
             input = $("#search").val();
             var $xhr = $.getJSON(apiQuery + input);
-
+            input = $("#search").val('');
+            //clear the previous search results
             $xhr.done(function(data) {
                 if ($xhr.status !== 200) {
                     console.log("there was an error")
                     return;
                 } else {
-                    //console.log(data);
+                    console.log(data);
                     for (var k in data.Search) {
                         var movie = {
                             "imdbID": data.Search[k].imdbID,
                             "poster": data.Search[k].Poster,
                             "title": data.Search[k].Title,
                             "year": data.Search[k].Year
-
                         };
                         movies.push(movie);
-
-
                     }
-
-                    //console.log(JSON.parse())
-                    //code that relies on response data
-
                     console.log(movies);
                     renderMovies();
                 }
-
             });
             $xhr.fail(function(err) {
                 console.log(err);
             });
         }
     }
-
+    function refresh() {
+      movies = [];
+    }
 
 
 
